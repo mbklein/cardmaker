@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'sinatra'
-require 'rmagick'
+require 'RMagick'
 require 'tempfile'
 
 class CardMaker < Sinatra::Base
