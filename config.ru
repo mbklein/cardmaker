@@ -1,0 +1,2 @@
+require './cardmaker'
+run CardMaker
