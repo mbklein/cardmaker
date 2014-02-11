@@ -1,0 +1,41 @@
+<html>
+<head>
+  <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      var addCard = function() {
+        var new_card = $('#blank-card').html()
+        $('#card-specs').append($('<div></div>').html(new_card))
+      }
+
+      $('#add-another').on('click',function() {
+        addCard();
+        return(false);
+      });
+
+      for(var i=0;i<5;i++) { addCard(); }
+    })
+  </script>
+  <style>
+    body, label { font-family: Helvetica, sans-serif; }
+    #blank-card { display: none;                      }
+  </style>
+</head>
+<body>
+
+<form action="cards" method="POST">
+  <p><button id="add-another">Add another!</button> <button type="submit">Go! Do! Make!</button></p>
+  <div id="card-specs">
+  </div>
+</form>
+
+<div id="blank-card">
+I want a <select name="card[]">
+  <option value="White">White</option>
+  <option value="Black">Black</option>
+  <option value="Black2">Black (Pick 2)</option>
+  <option value="Black3">Black (Pick 3)</option>
+</select>
+card that says <input type="text" name="text[]" size=70>
+</div>
+</body>

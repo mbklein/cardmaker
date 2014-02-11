@@ -1,7 +1,13 @@
 <html>
-  <body style="background-color: lightgray">
-    <% @data.each do |text, card| %>
-      <img src="card?text=<%=text%>&card=<%=card%>" style="width:<%=@card_width%>"/>
-    <% end %>
-  </body>
+<head>
+  <style type="text/css">
+    body { background-color: lightgray; }
+    img  { width: <%= @card_width %>;    }
+  </style>
+</head>
+<body>
+  <% @data.each do |text, card| %>
+    <img src="card?text=<%=URI.encode(text)%>&card=<%=URI.encode(card)%>"/>
+  <% end %>
+</body>
 </html>

@@ -3,6 +3,7 @@
 require 'sinatra'
 require 'RMagick'
 require 'tempfile'
+require 'uri'
 
 class CardMaker < Sinatra::Base
 
@@ -29,13 +30,23 @@ class CardMaker < Sinatra::Base
     end
   end
 
+  get '/' do
+    erb :index
+  end
+
   get '/card' do
     content_type 'image/png'
     make_card(params[:text],params[:card])
   end
 
   get '/cards' do
-    @data = params[:text].zip(params[:card])
+    @data = params[:text].zip(params[:card]).select { |pair| not (pair[0].nil? or pair[0].empty?) }
+    @card_width = params[:width] || 250
+    erb :cards
+  end
+
+  post '/cards' do
+    @data = params[:text].zip(params[:card]).select { |pair| not (pair[0].nil? or pair[0].empty?) }
     @card_width = params[:width] || 250
     erb :cards
   end
