@@ -7,7 +7,9 @@
 </head>
 <body>
   <% @data.each do |text, card| %>
-    <img src="card?text=<%=URI.encode(text)%>&card=<%=URI.encode(card)%>"/>
+    <img src="card?text=<%=escape(text)%>&card=<%=escape(card)%>"/>
   <% end %>
+
+  <p><a href="<%=@permalink%>">Permalink</a></p>
 </body>
 </html>

@@ -8,6 +8,14 @@ require 'uri'
 class CardMaker < Sinatra::Base
 
   helpers do
+    def escape(str)
+      str.gsub(/[^\-_.!~*'()a-zA-Z\d;\/:@=+$,\[\]]/) { |m| "%#{m.ord.to_s(16)}" }
+    end
+
+    def card_query(data)
+      data.collect { |pair| "card[]=#{escape(pair[1])}&text[]=#{escape(pair[0])}" }.join('&')
+    end
+
     def make_card(text, source_card)
       text_size = 60
       color = source_card =~ /White/ ? 'black' : 'white'
@@ -42,12 +50,14 @@ class CardMaker < Sinatra::Base
   get '/cards' do
     @data = params[:text].zip(params[:card]).select { |pair| not (pair[0].nil? or pair[0].empty?) }
     @card_width = params[:width] || 250
+    @permalink = "cards?#{card_query(@data)}"
     erb :cards
   end
 
   post '/cards' do
     @data = params[:text].zip(params[:card]).select { |pair| not (pair[0].nil? or pair[0].empty?) }
     @card_width = params[:width] || 250
+    @permalink = "cards?#{card_query(@data)}"
     erb :cards
   end
 end
