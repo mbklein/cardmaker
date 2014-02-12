@@ -9,7 +9,10 @@
 <body>
   <% @data.each do |card_data| %>
     <% unless card_data['text'].nil? or card_data['text'].empty? %>
-      <img src="/card/<%=encode_data(card_data)%>.png"/>
+      <% card_path = "/card/#{encode_data(card_data)}.png" %>
+      <a href="<%=card_path%>" target="_blank">
+        <img src="<%=card_path%>"/>
+      </a>
     <% end %>
   <% end %>
 
