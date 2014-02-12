@@ -22,11 +22,11 @@ class CardMaker < Sinatra::Base
 
   helpers do
     def escape(str)
-      str.gsub(/[^\-_.!~*'()a-zA-Z\d;\/:@=+$,\[\]]/) { |m| "%#{m.ord.to_s(16)}" }
+      str.gsub(/[^\-_.!~*'()a-zA-Z\d;\/:@=$,\[\]]/) { |m| "%#{m.ord.to_s(16)}" }
     end
 
     def card_query(data)
-      "data=#{Base64.encode64(Zlib::Deflate.deflate(data.to_json)).strip.gsub(/\s+/,'')}"
+      "data=#{escape(Base64.encode64(Zlib::Deflate.deflate(data.to_json)).strip.gsub(/\s+/,''))}"
     end
 
     def make_card(text, source_card)
