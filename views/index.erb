@@ -1,29 +1,3 @@
-<html>
-<head>
-  <title>Cardmaker</title>
-  <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-  <script type="text/javascript">
-    $(document).ready(function() {
-      var addCard = function() {
-        var new_card = $('#blank-card').html()
-        $('#card-specs').append($('<div></div>').html(new_card))
-      }
-
-      $('#add-another').on('click',function() {
-        addCard();
-        return(false);
-      });
-
-      for(var i=0;i<5;i++) { addCard(); }
-    })
-  </script>
-  <style>
-    body, label { font-family: Helvetica, sans-serif; }
-    #blank-card { display: none;                      }
-  </style>
-</head>
-<body>
-
 <form action="cards" method="POST">
   <p><button id="add-another">Add another!</button> <button type="submit">Go! Do! Make!</button></p>
   <div id="card-specs">
@@ -39,4 +13,18 @@ I want a <select name="card[]">
 </select>
 card that says <input type="text" name="text[]" size=70>
 </div>
-</body>
+<script type="text/javascript">
+  $(document).ready(function() {
+    var addCard = function() {
+      var new_card = $('#blank-card').html()
+      $('#card-specs').append($('<div></div>').html(new_card))
+    }
+
+    $('#add-another').on('click',function() {
+      addCard();
+      return(false);
+    });
+
+    for(var i=0;i<5;i++) { addCard(); }
+  })
+</script>

@@ -64,7 +64,7 @@ class CardMaker < Sinatra::Base
   end
 
   get '/' do
-    erb :index
+    erb :index, :layout => :layout
   end
 
   get '/card/*.png' do
@@ -75,7 +75,7 @@ class CardMaker < Sinatra::Base
 
   get '/cards/*' do
     decode_params
-    erb :cards
+    erb :cards, :layout => :layout
   end
 
   post '/cards' do

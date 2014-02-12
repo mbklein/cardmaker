@@ -1,21 +1,10 @@
-<html>
-<head>
-  <title>Cardmaker</title>
-  <style type="text/css">
-    body { background-color: lightgray; }
-    img  { width: <%= @card_width %>;    }
-  </style>
-</head>
-<body>
-  <% @data.each do |card_data| %>
-    <% unless card_data['text'].nil? or card_data['text'].empty? %>
-      <% card_path = "/card/#{encode_data(card_data)}.png" %>
-      <a href="<%=card_path%>" target="_blank">
-        <img src="<%=card_path%>"/>
-      </a>
-    <% end %>
+<% @data.each do |card_data| %>
+  <% unless card_data['text'].nil? or card_data['text'].empty? %>
+    <% card_path = "/card/#{encode_data(card_data)}.png" %>
+    <a href="<%=card_path%>" target="_blank">
+      <img src="<%=card_path%>"/>
+    </a>
   <% end %>
+<% end %>
 
-  <p><a href="<%=permalink%>">Permalink</a> <a href="/">Start Over</a></p>
-</body>
-</html>
+<p><a href="<%=permalink%>">Permalink</a> <a href="/">Start Over</a></p>

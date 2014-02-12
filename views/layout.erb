@@ -1,0 +1,22 @@
+<html>
+<head>
+  <title>Cardmaker</title>
+  <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+  <style type="text/css">
+    body, label { 
+      background-color: lightgray;
+      font-family: Helvetica, sans-serif; 
+    }
+    img  { 
+      width: <%= @card_width %>;
+    }
+    #blank-card { 
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <%= yield %>
+  <%= erb :footer %>
+</body>
+</html>
