@@ -7,10 +7,12 @@
   </style>
 </head>
 <body>
-  <% @data.each do |text, card| %>
-    <img src="card?<%=card_query({'text'=>text,'card'=>card})%>"/>
+  <% @data.each do |card_data| %>
+    <% unless card_data['text'].nil? or card_data['text'].empty? %>
+      <img src="/card/<%=encode_data(card_data)%>.png"/>
+    <% end %>
   <% end %>
 
-  <p><a href="<%=@permalink%>">Permalink</a> <a href="/">Start Over</a></p>
+  <p><a href="<%=permalink%>">Permalink</a> <a href="/">Start Over</a></p>
 </body>
 </html>

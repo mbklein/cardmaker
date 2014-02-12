@@ -10,23 +10,35 @@ require 'zlib'
 
 class CardMaker < Sinatra::Base
 
-  before do
-    if params[:data]
-      @data = JSON.parse(Zlib::Inflate.inflate(Base64.decode64(params[:data])))
-    elsif params[:text].is_a?(Array)
-      @data = params[:text].zip(params[:card]).select { |pair| not (pair[0].nil? or pair[0].empty?) }
-    else
-      @data = { 'text' => params[:text], 'card' => params[:card] }
-    end
-  end
-
   helpers do
+    def decode_params
+      data = params[:data] || (params[:splat] ? params[:splat].join('/') : nil)
+      if data
+        @data = decode_data(data)
+      elsif params[:text].is_a?(Array)
+        @data = params[:text].collect.with_index { |text,index|
+          { 'text' => text, 'card' => (params[:card][index] || 'White') }
+        }
+      else
+        @data = { 'text' => params[:text], 'card' => params[:card] }
+      end
+      @card_width = params[:width] || 250
+    end
+
     def escape(str)
       str.gsub(/[^\-_.!~*'()a-zA-Z\d;\/:@=$,\[\]]/) { |m| "%#{m.ord.to_s(16)}" }
     end
 
-    def card_query(data)
-      "data=#{escape(Base64.encode64(Zlib::Deflate.deflate(data.to_json)).strip.gsub(/\s+/,''))}"
+    def decode_data(data)
+      JSON.parse(Zlib::Inflate.inflate(Base64.decode64(data)))
+    end
+
+    def encode_data(data)
+      escape(Base64.encode64(Zlib::Deflate.deflate(data.to_json)).strip.gsub(/\s+/,''))
+    end
+
+    def permalink
+      "/cards/#{encode_data(@data)}"
     end
 
     def make_card(text, source_card)
@@ -55,18 +67,19 @@ class CardMaker < Sinatra::Base
     erb :index
   end
 
-  get '/card' do
+  get '/card/*.png' do
+    decode_params
     content_type 'image/png'
     make_card(@data['text'],@data['card'])
   end
 
-  get '/cards' do
-    @card_width = params[:width] || 250
-    @permalink = "cards?#{card_query(@data)}"
+  get '/cards/*' do
+    decode_params
     erb :cards
   end
 
   post '/cards' do
-    redirect "cards?#{card_query(@data)}"
+    decode_params
+    redirect permalink
   end
 end
