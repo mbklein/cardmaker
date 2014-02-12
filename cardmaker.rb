@@ -1,11 +1,24 @@
 #!/usr/bin/env ruby
 
 require 'sinatra'
+require 'json'
 require 'RMagick'
 require 'tempfile'
 require 'uri'
+require 'base64'
+require 'zlib'
 
 class CardMaker < Sinatra::Base
+
+  before do
+    if params[:data]
+      @data = JSON.parse(Zlib::Inflate.inflate(Base64.decode64(params[:data])))
+    elsif params[:text].is_a?(Array)
+      @data = params[:text].zip(params[:card]).select { |pair| not (pair[0].nil? or pair[0].empty?) }
+    else
+      @data = { 'text' => params[:text], 'card' => params[:card] }
+    end
+  end
 
   helpers do
     def escape(str)
@@ -13,7 +26,7 @@ class CardMaker < Sinatra::Base
     end
 
     def card_query(data)
-      data.collect { |pair| "card[]=#{escape(pair[1])}&text[]=#{escape(pair[0])}" }.join('&')
+      "data=#{Base64.encode64(Zlib::Deflate.deflate(data.to_json)).strip.gsub(/\s+/,'')}"
     end
 
     def make_card(text, source_card)
@@ -44,20 +57,16 @@ class CardMaker < Sinatra::Base
 
   get '/card' do
     content_type 'image/png'
-    make_card(params[:text],params[:card])
+    make_card(@data['text'],@data['card'])
   end
 
   get '/cards' do
-    @data = params[:text].zip(params[:card]).select { |pair| not (pair[0].nil? or pair[0].empty?) }
     @card_width = params[:width] || 250
     @permalink = "cards?#{card_query(@data)}"
     erb :cards
   end
 
   post '/cards' do
-    @data = params[:text].zip(params[:card]).select { |pair| not (pair[0].nil? or pair[0].empty?) }
-    @card_width = params[:width] || 250
-    @permalink = "cards?#{card_query(@data)}"
-    erb :cards
+    redirect "cards?#{card_query(@data)}"
   end
 end
