@@ -43,7 +43,7 @@ class CardMaker < Sinatra::Base
 
     def make_card(text, source_card)
       text_size = 60
-      color = source_card =~ /White/ ? 'black' : 'white'
+      color = source_card =~ /White/i ? 'black' : 'white'
 
       capfile = File.join(Dir.tmpdir, Dir::Tmpname.make_tmpname(['caption','.png'],nil))
       args = [
@@ -78,8 +78,13 @@ class CardMaker < Sinatra::Base
     erb :cards, :layout => :layout
   end
 
+  get '/cards' do
+    decode_params
+    erb :cards, :layout => :layout
+  end
+
   post '/cards' do
     decode_params
-    redirect permalink
+    erb :cards, :layout => :layout
   end
 end
