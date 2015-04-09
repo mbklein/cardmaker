@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 gem 'sinatra'
-gem 'rmagick', :require => "RMagick"
+gem 'cahdmaker'
 gem 'json'
 
 gem 'pry', :group => :development

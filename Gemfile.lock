@@ -1,6 +1,8 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    cahdmaker (0.0.1)
+      rmagick
     coderay (1.0.9)
     json (1.8.1)
     method_source (0.8.2)
@@ -11,7 +13,7 @@ GEM
     rack (1.5.2)
     rack-protection (1.5.0)
       rack
-    rmagick (2.13.2)
+    rmagick (2.14.0)
     sinatra (1.4.3)
       rack (~> 1.4)
       rack-protection (~> 1.4)
@@ -23,7 +25,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  cahdmaker
   json
   pry
-  rmagick
   sinatra
